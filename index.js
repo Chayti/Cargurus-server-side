@@ -20,6 +20,7 @@ async function run() {
         const productCollection = database.collection("products");
         const orderCollection = database.collection("orders");
         const usersCollection = database.collection("users");
+        const reviewCollection = database.collection("review");
 
         // GET API
         app.get('/products', async (req, res) => {
@@ -71,6 +72,20 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const result = await orderCollection.deleteOne(query)
             res.send(result)
+        })
+
+        // GET API for review
+        app.get('/review', async (req, res) => {
+            const cursor = reviewCollection.find({})
+            const review = await cursor.toArray()
+            res.send(review)
+        })
+
+        // POST API to add review
+        app.post('/addReview', async (req, res) => {
+            const review = req.body
+            const result = await reviewCollection.insertOne(review)
+            res.json(result)
         })
 
         // GET all orders API
